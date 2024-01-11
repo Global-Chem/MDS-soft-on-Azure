@@ -37,6 +37,8 @@ jobs:
 
       - name: Prepare Input Files
         run: |
+          pwd
+          ls
           cp simulation/input_files/NVT.mdp .
           cp simulation/input_files/NPT.mdp .
           cp simulation/input_files/MD.mdp .
