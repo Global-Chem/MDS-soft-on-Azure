@@ -48,16 +48,22 @@ jobs:
 
       - name: Run NVT Simulation
         run: |
+          pwd
+          ls
           gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
           gmx mdrun -deffnm NVT
 
       - name: Run NPT Simulation
         run: |
+          pwd
+          ls
           gmx grompp -f NPT.mdp -c NVT.gro -r NVT.gro -p topol.top -n index.ndx -maxwarn 2 -o NPT.tpr
           gmx mdrun -deffnm NPT
 
       - name: Run MD Simulation
         run: |
+          pwd
+          ls
           gmx grompp -f MD.mdp -c NPT.gro -t NPT.cpt -p topol.top -n index.ndx -maxwarn 2 -o MD.tpr
           gmx mdrun -deffnm MD
 
