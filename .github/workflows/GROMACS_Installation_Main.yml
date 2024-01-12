@@ -39,12 +39,12 @@ jobs:
         run: |
           pwd
           ls
-          cp simulation/input_files/NVT.mdp .
-          cp simulation/input_files/NPT.mdp .
-          cp simulation/input_files/MD.mdp .
-          cp simulation/input_files/EM.gro .
-          cp simulation/input_files/topol.top .
-          cp simulation/input_files/index.ndx .
+          cp Demo_Run/simulation/input_files/NVT.mdp .
+          cp Demo_Run/simulation/input_files/NPT.mdp .
+          cp Demo_Run/simulation/input_files/MD.mdp .
+          cp Demo_Run/simulation/input_files/EM.gro .
+          cp Demo_Run/simulation/input_files/topol.top .
+          cp Demo_Run/simulation/input_files/index.ndx .
 
       - name: Run NVT Simulation
         run: |
