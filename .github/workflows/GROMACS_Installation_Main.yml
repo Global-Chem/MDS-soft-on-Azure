@@ -34,14 +34,7 @@ jobs:
           echo 'source /usr/local/gromacs/bin/GMXRC' >> $HOME/.bashrc
           source $HOME/.bashrc
           export PATH="/usr/local/gromacs/bin:$PATH"  # Added this line to add GROMACS to PATH
-
-      - name: Debug GROMACS Installation
-        run: |
-          echo "Checking GROMACS installation..."
-          echo "PATH: $PATH"
-          gmx --version
-          ls /usr/local/gromacs/bin
-
+      
       - name: Prepare Input Files
         run: |
           pwd
