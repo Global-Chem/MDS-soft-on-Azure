@@ -46,8 +46,6 @@ jobs:
           cp Demo_Run/simulation/input_files/topol.top .
           cp Demo_Run/simulation/input_files/index.ndx .
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Run NVT Simulation
         run: |
           pwd
