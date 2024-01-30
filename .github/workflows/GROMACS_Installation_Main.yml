@@ -8,6 +8,9 @@ jobs:
     runs-on: warp-ubuntu-latest-x64-2x
     timeout-minutes: 240  
 
+    env:
+      PATH: "/usr/local/gromacs/bin:$PATH"  # Set PATH for all steps
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -33,8 +36,7 @@ jobs:
           sudo make install
           echo 'source /usr/local/gromacs/bin/GMXRC' >> $HOME/.bashrc
           source $HOME/.bashrc
-          export PATH="/usr/local/gromacs/bin:$PATH"  # Added this line to add GROMACS to PATH
-      
+
       - name: Prepare Input Files
         run: |
           pwd
