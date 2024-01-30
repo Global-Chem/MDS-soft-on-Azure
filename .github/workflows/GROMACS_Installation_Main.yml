@@ -12,6 +12,9 @@ jobs:
       PATH: "/usr/local/gromacs/bin:$PATH"  # Set PATH for all steps
 
     steps:
+      - name: Install tar
+        run: sudo apt-get install -y tar
+        
       - name: Checkout source
         uses: actions/checkout@v2
 
