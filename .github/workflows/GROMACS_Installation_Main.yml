@@ -19,11 +19,10 @@ jobs:
          python-version: 3.8
          activate-environment: gromacs-env
 
-      - name: Create and activate conda environment
+      - name: Initialize Conda
         run: |
-         conda create -n gromacs-env python=3.8
+         eval "$(conda shell.bash hook)"
          conda activate gromacs-env
-         conda install -y gromacs=2023.4 pocl -c conda-forge -c bioconda
 
       - name: Prepare Input Files
         run: |
