@@ -19,7 +19,7 @@ jobs:
     - name: Create and activate conda environment
       run: |
         conda create --name AmberTools23
-        echo "conda activate AmberTools23" >> $GITHUB_ENV
+        echo "source $CONDA/bin/activate AmberTools23" >> $GITHUB_ENV
 
     - name: Install AmberTools
       run: |
@@ -27,4 +27,5 @@ jobs:
 
     - name: Run AmberTools
       run: |
+        # Add commands to run AmberTools here
         
