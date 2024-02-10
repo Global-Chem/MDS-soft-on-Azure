@@ -2,7 +2,7 @@ name: Run GROMACS Simulations
 
 on:
   workflow_dispatch
-
+ 
 jobs:
   simulate:
     runs-on: warp-ubuntu-latest-x64-2x
