@@ -22,9 +22,9 @@ jobs:
       - name: Initialize Conda
         shell: bash -l {0}
         run: |
-           echo "source $CONDA_PREFIX/etc/profile.d/conda.sh" >> ~/.bashrc
-           source ~/.bashrc
-           conda activate gromacs-env
+          conda init bash
+          source ~/.bashrc
+          conda activate gromacs-env
 
       - name: Prepare Input Files
         run: |
