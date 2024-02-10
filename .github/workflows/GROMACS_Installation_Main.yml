@@ -15,14 +15,15 @@ jobs:
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          auto-update-conda: true
-          python-version: 3.8
-          environment-file: .github/workflows/environment.yml
-          activate-environment: gromacs-env
+         auto-update-conda: true
+         python-version: 3.8
+         activate-environment: gromacs-env
 
       - name: Create and activate conda environment
         run: |
-         conda install -y gromacs=2023.4 -c conda-forge -c bioconda
+         conda create -n gromacs-env python=3.8
+         conda activate gromacs-env
+         conda install -y gromacs=2023.4 pocl -c conda-forge -c bioconda
 
       - name: Prepare Input Files
         run: |
