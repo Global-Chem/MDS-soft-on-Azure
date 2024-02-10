@@ -1,4 +1,4 @@
-name: Amber Installation and Run
+name: AmberTools Installation and Run
 
 on: [push, pull_request]
 
@@ -10,28 +10,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup environment
-      run: |
-        sudo apt -y update
-        sudo apt -y install tcsh make gcc gfortran flex bison patch bc wget xorg-dev libz-dev libbz2-dev
-        sudo apt -y install openmpi-bin libopenmpi-dev openssh-client
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.8
 
-    - name: Install cmake
+    - name: Create and activate conda environment
       run: |
-        wget https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1.tar.gz
-        tar -zxvf cmake-3.21.1.tar.gz
-        cd cmake-3.21.1
-        ./bootstrap
-        make
-        sudo make install
+        conda create --name AmberTools23
+        echo "conda activate AmberTools23" >> $GITHUB_ENV
 
-    - name: Install Amber
+    - name: Install AmberTools
       run: |
-        # Assuming Amber source code is in the repository
-        cd amber22_src/build
-        ./run_cmake
-        make install
+        conda install -c conda-forge ambertools=23
 
-    - name: Run Amber
+    - name: Run AmberTools
       run: |
-        # Add commands to run Amber here
+        
