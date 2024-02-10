@@ -34,9 +34,11 @@ jobs:
           cp Demo_Run/simulation/input_files/index.ndx .
 
       - name: Run NVT Simulation
+        shell: bash
         run: |
-          gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
-          gmx mdrun -deffnm NVT
+         bash -l -c "conda activate gromacs-env"
+         bash -l -c "gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr"
+         bash -l -c "gmx mdrun -deffnm NVT"
 
       - name: Run NPT Simulation
         run: |
