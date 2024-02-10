@@ -21,6 +21,7 @@ jobs:
       - name: Create and activate conda environment
         run: |
           conda create --name gromacs-env gromacs=2020.3 -c conda-forge -c bioconda
+          conda activate gromacs-env
           shell: bash -l {0}
 
       - name: Prepare Input Files
