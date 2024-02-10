@@ -32,6 +32,7 @@ jobs:
           cp Demo_Run/simulation/input_files/EM.gro .
           cp Demo_Run/simulation/input_files/topol.top .
           cp Demo_Run/simulation/input_files/index.ndx .
+          cp Demo_Run/simulation/input_files/LIG.itp .
 
       - name: Run NVT Simulation
         shell: bash
