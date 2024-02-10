@@ -26,6 +26,8 @@ jobs:
 
       - name: Prepare Input Files
         run: |
+          pwd
+          ls
           cp Demo_Run/simulation/input_files/NVT.mdp .
           cp Demo_Run/simulation/input_files/NPT.mdp .
           cp Demo_Run/simulation/input_files/MD.mdp .
@@ -37,6 +39,8 @@ jobs:
       - name: Run NVT Simulation
         shell: bash
         run: |
+         pwd
+         ls
          bash -l -c "conda activate gromacs-env"
          bash -l -c "gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr"
          bash -l -c "gmx mdrun -deffnm NVT"
