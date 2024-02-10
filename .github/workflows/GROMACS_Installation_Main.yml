@@ -26,6 +26,7 @@ jobs:
 
       - name: Prepare Input Files
         run: |
+          source activate gromacs-env
           pwd
           ls
           cp Demo_Run/simulation/input_files/NVT.mdp .
