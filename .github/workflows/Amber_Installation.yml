@@ -27,9 +27,8 @@ jobs:
         conda install -c conda-forge ambertools=23
       shell: bash -l {0}
 
-    - name: Run AmberTools Simulation
+    - name: Run AmberTools
       run: |
         conda activate AmberTools23
-        chmod +x run_simulation.sh
-        ./run_simulation.sh
+        # Add commands to run AmberTools here
       shell: bash -l {0}
