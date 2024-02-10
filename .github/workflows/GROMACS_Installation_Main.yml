@@ -20,8 +20,8 @@ jobs:
 
       - name: Create and activate conda environment
         run: |
-          conda create --name gromacs-env gromacs=2020.3 -c bioconda
-          echo "conda activate gromacs-env" >> $GITHUB_ENV
+            conda create --name gromacs-env gromacs=2020.3 -c conda-forge -c bioconda
+            echo "conda activate gromacs-env" >> $GITHUB_ENV
 
       - name: Prepare Input Files
         run: |
