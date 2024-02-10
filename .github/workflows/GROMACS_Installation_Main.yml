@@ -17,12 +17,12 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.7
+          environment-file: environment.yml
+          activate-environment: gromacs-env
 
       - name: Create and activate conda environment
         run: |
-          conda create --name gromacs-env gromacs=2020.3 -c conda-forge -c bioconda
-          conda activate gromacs-env
-          shell: bash -l {0}
+         conda install gromacs=2020.3 -c conda-forge -c bioconda
 
       - name: Prepare Input Files
         run: |
