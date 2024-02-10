@@ -12,21 +12,21 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-         auto-update-conda: true
-         python-version: 3.8
-         activate-environment: gromacs-env
-
-      - name: Initialize Conda
+      - name: Install Miniconda
         run: |
-         eval "$(conda shell.bash hook)"
-         conda activate gromacs-env
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+
+      - name: Setup Conda Environment
+        run: |
+          conda create -n gromacs-env python=3.8 -y
+          conda init bash
+          source ~/.bashrc
+          conda activate gromacs-env
 
       - name: Prepare Input Files
         run: |
-          source activate gromacs-env
           pwd
           ls
           cp Demo_Run/simulation/input_files/NVT.mdp .
@@ -42,17 +42,19 @@ jobs:
         run: |
          pwd
          ls
-         bash -l -c "conda activate gromacs-env"
-         bash -l -c "gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr"
-         bash -l -c "gmx mdrun -deffnm NVT"
+         conda activate gromacs-env
+         gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
+         gmx mdrun -deffnm NVT
 
       - name: Run NPT Simulation
         run: |
+          conda activate gromacs-env
           gmx grompp -f NPT.mdp -c NVT.gro -r NVT.gro -p topol.top -n index.ndx -maxwarn 2 -o NPT.tpr
           gmx mdrun -deffnm NPT
 
       - name: Run MD Simulation
         run: |
+          conda activate gromacs-env
           gmx grompp -f MD.mdp -c NPT.gro -t NPT.cpt -p topol.top -n index.ndx -maxwarn 2 -o MD.tpr
           gmx mdrun -deffnm MD
 
