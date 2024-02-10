@@ -1,1 +1,37 @@
+name: Amber Installation and Run
 
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup environment
+      run: |
+        sudo apt -y update
+        sudo apt -y install tcsh make gcc gfortran flex bison patch bc wget xorg-dev libz-dev libbz2-dev
+        sudo apt -y install openmpi-bin libopenmpi-dev openssh-client
+
+    - name: Install cmake
+      run: |
+        wget https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1.tar.gz
+        tar -zxvf cmake-3.21.1.tar.gz
+        cd cmake-3.21.1
+        ./bootstrap
+        make
+        sudo make install
+
+    - name: Install Amber
+      run: |
+        # Assuming Amber source code is in the repository
+        cd amber22_src/build
+        ./run_cmake
+        make install
+
+    - name: Run Amber
+      run: |
+        # Add commands to run Amber here
