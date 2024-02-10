@@ -22,7 +22,7 @@ jobs:
 
       - name: Create and activate conda environment
         run: |
-         conda install -y gromacs=2020.3 -c conda-forge -c bioconda
+         conda install -y gromacs=2023.4 -c conda-forge -c bioconda
 
       - name: Prepare Input Files
         run: |
