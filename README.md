@@ -1,2 +1,2 @@
 # warpbuild
-This repo is created to test run the MD software types like GROMACS, Amber Charm with the Warp-Build facilities.  
+This repo is created to test run the MD software types like GROMACS, Amber and Charm with the Warp-Build facilities.  
