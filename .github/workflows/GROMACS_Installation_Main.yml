@@ -5,45 +5,26 @@ on:
 
 jobs:
   simulate:
-    runs-on: warp-ubuntu-latest-arm64-4x
+    runs-on: warp-ubuntu-latest-x64-2x
     timeout-minutes: 240  
 
-    env:
-      PATH: "/usr/local/gromacs/bin:$PATH"  # Set PATH for all steps
-
     steps:
-      - name: Install tar
-        run: sudo apt-get install -y tar
-        
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: 3.7
 
-      - name: Install GROMACS Requirements
+      - name: Create and activate conda environment
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          wget https://ftp.gromacs.org/gromacs/gromacs-2023.3.tar.gz
-          tar xfz gromacs-2023.3.tar.gz
-          cd gromacs-2023.3
-          mkdir build
-          cd build
-          cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON
-          make 
-          # Exclude the problematic test
-          ctest -j $(nproc) -E MdrunTestsTwoRanks --output-on-failure || true #workflow continues even if the test fails
-          sudo make install
-          echo 'source /usr/local/gromacs/bin/GMXRC' >> $HOME/.bashrc
-          source $HOME/.bashrc
+          conda create --name gromacs-env gromacs=2023.3 -c bioconda
+          echo "conda activate gromacs-env" >> $GITHUB_ENV
 
       - name: Prepare Input Files
         run: |
-          pwd
-          ls
           cp Demo_Run/simulation/input_files/NVT.mdp .
           cp Demo_Run/simulation/input_files/NPT.mdp .
           cp Demo_Run/simulation/input_files/MD.mdp .
@@ -53,22 +34,16 @@ jobs:
 
       - name: Run NVT Simulation
         run: |
-          pwd
-          ls
           gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
           gmx mdrun -deffnm NVT
 
       - name: Run NPT Simulation
         run: |
-          pwd
-          ls
           gmx grompp -f NPT.mdp -c NVT.gro -r NVT.gro -p topol.top -n index.ndx -maxwarn 2 -o NPT.tpr
           gmx mdrun -deffnm NPT
 
       - name: Run MD Simulation
         run: |
-          pwd
-          ls
           gmx grompp -f MD.mdp -c NPT.gro -t NPT.cpt -p topol.top -n index.ndx -maxwarn 2 -o MD.tpr
           gmx mdrun -deffnm MD
 
