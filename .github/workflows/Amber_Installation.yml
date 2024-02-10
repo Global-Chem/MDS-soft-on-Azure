@@ -1,54 +1,35 @@
-name: Run GROMACS Simulations
+name: AmberTools Installation and Run
 
-on:
-  workflow_dispatch
+on: [push, pull_request]
 
 jobs:
-  simulate:
-    runs-on: warp-ubuntu-latest-x64-2x
-    timeout-minutes: 240  
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          python-version: 3.7
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.8
 
-      - name: Create and activate conda environment
-        run: |
-          conda create --name gromacs-env gromacs=2023.3 -c bioconda
-          echo "conda activate gromacs-env" >> $GITHUB_ENV
+    - name: Create conda environment
+      run: |
+        conda create --name AmberTools23
+      shell: bash -l {0}
 
-      - name: Prepare Input Files
-        run: |
-          cp Demo_Run/simulation/input_files/NVT.mdp .
-          cp Demo_Run/simulation/input_files/NPT.mdp .
-          cp Demo_Run/simulation/input_files/MD.mdp .
-          cp Demo_Run/simulation/input_files/EM.gro .
-          cp Demo_Run/simulation/input_files/topol.top .
-          cp Demo_Run/simulation/input_files/index.ndx .
+    - name: Install AmberTools
+      run: |
+        conda activate AmberTools23
+        conda install -c conda-forge ambertools=23
+      shell: bash -l {0}
 
-      - name: Run NVT Simulation
-        run: |
-          gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
-          gmx mdrun -deffnm NVT
-
-      - name: Run NPT Simulation
-        run: |
-          gmx grompp -f NPT.mdp -c NVT.gro -r NVT.gro -p topol.top -n index.ndx -maxwarn 2 -o NPT.tpr
-          gmx mdrun -deffnm NPT
-
-      - name: Run MD Simulation
-        run: |
-          gmx grompp -f MD.mdp -c NPT.gro -t NPT.cpt -p topol.top -n index.ndx -maxwarn 2 -o MD.tpr
-          gmx mdrun -deffnm MD
-
-      - name: Archive Simulation Output
-        uses: actions/upload-artifact@v2
-        with:
-          name: simulation-results
-          path: ./*.{edr,log,trr,tpr,xtc,xvg}
+    - name: Run AmberTools Simulation
+      run: |
+        conda activate AmberTools23
+        chmod +x run_simulation.sh
+        ./run_simulation.sh
+      shell: bash -l {0}
