@@ -20,9 +20,11 @@ jobs:
          activate-environment: gromacs-env
 
       - name: Initialize Conda
+        shell: bash -l {0}
         run: |
-         eval "$(conda shell.bash hook)"
-         conda activate gromacs-env
+           echo "source $CONDA_PREFIX/etc/profile.d/conda.sh" >> ~/.bashrc
+           source ~/.bashrc
+           conda activate gromacs-env
 
       - name: Prepare Input Files
         run: |
