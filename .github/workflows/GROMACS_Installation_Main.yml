@@ -21,9 +21,9 @@ jobs:
       - name: Setup Conda Environment
         run: |
          conda create -n gromacs-env python=3.8 -y
-         echo "source $(conda info --base)/etc/profile.d/conda.sh" >> ~/.bashrc
          source $(conda info --base)/etc/profile.d/conda.sh
          conda activate gromacs-env
+         conda install -c bioconda gromacs -y
          
       - name: Prepare Input Files
         run: |
@@ -44,7 +44,6 @@ jobs:
          conda activate gromacs-env
          pwd
          ls
-         conda activate gromacs-env
          gmx grompp -f NVT.mdp -c EM.gro -r EM.gro -p topol.top -n index.ndx -maxwarn 2 -o NVT.tpr
          gmx mdrun -deffnm NVT
 
@@ -52,14 +51,12 @@ jobs:
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate gromacs-env        
-          conda activate gromacs-env
           gmx grompp -f NPT.mdp -c NVT.gro -r NVT.gro -p topol.top -n index.ndx -maxwarn 2 -o NPT.tpr
           gmx mdrun -deffnm NPT
 
       - name: Run MD Simulation
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate gromacs-env
           conda activate gromacs-env
           gmx grompp -f MD.mdp -c NPT.gro -t NPT.cpt -p topol.top -n index.ndx -maxwarn 2 -o MD.tpr
           gmx mdrun -deffnm MD
