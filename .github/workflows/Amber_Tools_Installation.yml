@@ -1,34 +1,56 @@
-name: AmberTools Installation and Run
+name: Amber GPU CI
 
-on: [push, pull_request] 
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Setup Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        auto-update-conda: true 
-        python-version: 3.8
-
-    - name: Create conda environment
+    - name: Install dependencies
       run: |
-        conda create --name AmberTools23
-      shell: bash -l {0}
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
+        sudo apt-get install -y tcsh make gcc gfortran flex bison patch bc wget xorg-dev libz-dev libbz2-dev
+        sudo apt-get install -y cmake
 
-    - name: Install AmberTools
+    - name: Install CUDA
       run: |
-        conda activate AmberTools23
-        conda install -c conda-forge ambertools=23
-      shell: bash -l {0}
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
+        sudo mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+        wget http://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
+        sudo dpkg -i cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
+        sudo apt-key add /var/cuda-repo-ubuntu1804-11-2-local/7fa2af80.pub
+        sudo apt-get update
+        sudo apt-get -y install cuda
 
-    - name: Run AmberTools
+    - name: Install Amber with GPU support
       run: |
-        conda activate AmberTools23
-        # Add commands to run AmberTools here
-      shell: bash -l {0}
+        export CUDA_HOME=/usr/local/cuda
+        cd $HOME
+        tar xvfj AmberTools23.tar.bz2
+        tar xvfj Amber22.tar.bz2
+        cd amber22_src/build
+        echo 'set(DCMAKE_C_COMPILER /usr/bin/gcc)' >> run_cmake
+        echo 'set(DCMAKE_CXX_COMPILER /usr/bin/g++)' >> run_cmake
+        echo 'set(DCUDA TRUE)' >> run_cmake
+        ./run_cmake
+        make install
+
+    - name: Setup Amber environment
+      run: |
+        source $HOME/amber22/amber.sh
+
+    - name: Test Amber
+      run: |
+        cd $AMBERHOME
+        export CUDA_VISIBLE_DEVICES=0
+        make test.cuda.serial
