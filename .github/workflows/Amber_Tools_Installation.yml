@@ -1,6 +1,6 @@
 name: AmberTools Installation and Run
 
-on: [push, pull_request]
+on: [push, pull_request] 
 
 jobs:
   build:
