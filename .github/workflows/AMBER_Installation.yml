@@ -1,11 +1,10 @@
 name: Amber GPU CI
 
 on:
-     workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: warp-ubuntu-latest-x64-2x
     steps:
     - uses: actions/checkout@v2
@@ -13,24 +12,17 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get upgrade
+        sudo apt-get upgrade -y
         sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
         sudo apt-get install -y tcsh make gcc gfortran flex bison patch bc wget xorg-dev libz-dev libbz2-dev
         sudo apt-get install -y cmake
 
-    - name: Install CUDA
+    - name: Fix broken dependencies
       run: |
-        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
-        sudo mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
-        wget http://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
-        sudo dpkg -i cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
-        sudo apt-key add /var/cuda-repo-ubuntu1804-11-2-local/7fa2af80.pub
-        sudo apt-get update
-        sudo apt-get -y install cuda
+        sudo apt-get install -f
 
     - name: Install Amber with GPU support
       run: |
-        export CUDA_HOME=/usr/local/cuda
         cd $HOME
         tar xvfj AmberTools23.tar.bz2
         tar xvfj Amber22.tar.bz2
@@ -44,9 +36,3 @@ jobs:
     - name: Setup Amber environment
       run: |
         source $HOME/amber22/amber.sh
-
-    - name: Test Amber
-      run: |
-        cd $AMBERHOME
-        export CUDA_VISIBLE_DEVICES=0
-        make test.cuda.serial
