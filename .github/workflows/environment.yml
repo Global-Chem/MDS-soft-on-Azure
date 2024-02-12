@@ -1,6 +1,0 @@
-name: gromacs-env
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - gromacs=2020.3
