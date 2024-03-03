@@ -8,23 +8,25 @@ jobs:
     runs-on: warp-ubuntu-latest-x64-2x
     steps:
     - uses: actions/checkout@v2
-      with:
-        lfs: true
 
     - name: Install dependencies
       run: |
        sudo apt-get update
        sudo apt-get upgrade -y
        sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
-       sudo apt-get install -y tcsh make gcc
+       sudo apt-get install -y tcsh make gcc lbzip2
 
     - name: Fix broken dependencies
       run: |
        sudo apt-get install -f
 
+    - name: Download Amber files from Google Drive
+      run: |
+        wget --no-check-certificate 'https://drive.google.com/file/d/1RnjRxZXK_gY-tDGxtMcae1tvYNoSFqd2/view?usp=drive_link' -O AmberTools23.tar.bz2
+        wget --no-check-certificate 'https://drive.google.com/file/d/1EVfrqJSAUioNbErfs0E_y-IhcYfQteke/view?usp=drive_link' -O Amber22.tar.bz2
+
     - name: Install Amber with GPU support
       run: |
-       cd ${{ github.workspace }}
        tar --use-compress-program=lbzip2 -xvf AmberTools23.tar.bz2
        tar --use-compress-program=lbzip2 -xvf Amber22.tar.bz2
        cd amber22_src/build
