@@ -13,27 +13,26 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
-        sudo apt-get install -y tcsh make gcc gfortran flex bison patch bc wget xorg-dev libz-dev libbz2-dev
-        sudo apt-get install -y cmake
+       sudo apt-get update
+       sudo apt-get upgrade -y
+       sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
+       sudo apt-get install -y tcsh make gcc
 
     - name: Fix broken dependencies
       run: |
-        sudo apt-get install -f
+       sudo apt-get install -f
 
     - name: Install Amber with GPU support
       run: |
-        cd ${{ github.workspace }}
-        tar xvfj AmberTools23.tar.bz2
-        tar xvfj Amber22.tar.bz2
-        cd amber22_src/build
-        echo 'set(DCMAKE_C_COMPILER /usr/bin/gcc)' >> run_cmake
-        echo 'set(DCMAKE_CXX_COMPILER /usr/bin/g++)' >> run_cmake
-        echo 'set(DCUDA TRUE)' >> run_cmake
-        ./run_cmake
-        make install
+       cd ${{ github.workspace }}
+       tar --use-compress-program=lbzip2 -xvf AmberTools23.tar.bz2
+       tar --use-compress-program=lbzip2 -xvf Amber22.tar.bz2
+       cd amber22_src/build
+       echo 'set(DCMAKE_C_COMPILER /usr/bin/gcc)' >> run_cmake
+       echo 'set(DCMAKE_CXX_COMPILER /usr/bin/g++)' >> run_cmake
+       echo 'set(DCUDA TRUE)' >> run_cmake
+       ./run_cmake
+       make install
 
     - name: Setup Amber environment
       run: |
