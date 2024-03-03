@@ -14,7 +14,7 @@ jobs:
        sudo apt-get update
        sudo apt-get upgrade -y
        sudo apt-get install -y xorg openbox xauth xserver-xorg-core xserver-xorg ubuntu-desktop aptitude
-       sudo apt-get install -y tcsh make gcc lbzip2
+       sudo apt-get install -y tcsh make gcc lbzip2 firefox
 
     - name: Fix broken dependencies
       run: |
