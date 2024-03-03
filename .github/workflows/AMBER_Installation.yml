@@ -23,7 +23,7 @@ jobs:
 
     - name: Install Amber with GPU support
       run: |
-        cd $HOME
+        cd ${{ github.workspace }}
         tar xvfj AmberTools23.tar.bz2
         tar xvfj Amber22.tar.bz2
         cd amber22_src/build
