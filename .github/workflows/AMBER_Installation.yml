@@ -37,4 +37,4 @@ jobs:
 
     - name: Setup Amber environment
       run: |
-        source $HOME/amber22/amber.sh
+        source ${{ github.workspace }}/amber22/amber.sh
