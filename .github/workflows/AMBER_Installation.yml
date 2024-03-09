@@ -29,9 +29,9 @@ jobs:
         tar xvfj AmberTools23.tar.bz2
         tar xvfj Amber22.tar.bz2
         cd amber22_src/build
-        echo 'set(DCMAKE_C_COMPILER "/usr/bin/gcc")' >> run_cmake
-        echo 'set(DCMAKE_CXX_COMPILER "/usr/bin/g++")' >> run_cmake
-        echo 'set(DCUDA TRUE)' >> run_cmake
+        echo 'DCMAKE_C_COMPILER=/usr/bin/gcc' >> run_cmake
+        echo 'DCMAKE_CXX_COMPILER=/usr/bin/g++' >> run_cmake
+        echo 'DCUDA=TRUE' >> run_cmake
         ./run_cmake
         make install
 
